@@ -18,6 +18,8 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          draw_at: string | null
+          ends_at: string
           id: string
           image_url: string | null
           is_active: boolean
@@ -31,6 +33,8 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string | null
+          draw_at?: string | null
+          ends_at?: string
           id?: string
           image_url?: string | null
           is_active?: boolean
@@ -44,6 +48,8 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string | null
+          draw_at?: string | null
+          ends_at?: string
           id?: string
           image_url?: string | null
           is_active?: boolean
@@ -122,6 +128,8 @@ export type Database = {
         Args: never
         Returns: {
           description: string
+          draw_at: string
+          ends_at: string
           id: string
           image_url: string
           is_active: boolean
