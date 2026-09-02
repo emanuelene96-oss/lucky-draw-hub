@@ -118,6 +118,22 @@ export type Database = {
         Args: { _product_id: string; _quantity: number }
         Returns: number[]
       }
+      products_with_sold: {
+        Args: never
+        Returns: {
+          description: string
+          id: string
+          image_url: string
+          is_active: boolean
+          name: string
+          prize_value_cents: number
+          slug: string
+          sold: number
+          tagline: string
+          ticket_price_cents: number
+          total_tickets: number
+        }[]
+      }
       tickets_sold: { Args: { _product_id: string }; Returns: number }
     }
     Enums: {
