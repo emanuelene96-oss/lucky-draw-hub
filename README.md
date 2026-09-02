@@ -1,14 +1,16 @@
-# Welcome to your Lovable project
+# Lucky Draw Hub
+
+I want to create a lotery website, users will log in throught google, then they will see the products, like an Iphone with a limited number of tickets( for example 2000), a Playstation with 1500 tickets, etc, i must be able to create as many products as i want, and each of them will have it s own page....on a product page the button buy will add to the user admin page how many tickets he bought and at what product
 
 This project was built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/94a399b8-47fc-4ad7-8661-123a09efcf97).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +22,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
