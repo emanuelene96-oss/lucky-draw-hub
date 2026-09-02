@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as NextDrawRouteImport } from './routes/next-draw'
 import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
 import { Route as PrizeSlugRouteImport } from './routes/prize.$slug'
 
@@ -29,6 +30,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NextDrawRoute = NextDrawRouteImport.update({
+  id: '/next-draw',
+  path: '/next-draw',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
   id: '/account',
   path: '/account',
@@ -43,12 +49,14 @@ const PrizeSlugRoute = PrizeSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/next-draw': typeof NextDrawRoute
   '/account': typeof AuthenticatedAccountRoute
   '/prize/$slug': typeof PrizeSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/next-draw': typeof NextDrawRoute
   '/account': typeof AuthenticatedAccountRoute
   '/prize/$slug': typeof PrizeSlugRoute
 }
@@ -57,19 +65,21 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/next-draw': typeof NextDrawRoute
   '/_authenticated/account': typeof AuthenticatedAccountRoute
   '/prize/$slug': typeof PrizeSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/account' | '/prize/$slug'
+  fullPaths: '/' | '/auth' | '/next-draw' | '/account' | '/prize/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/account' | '/prize/$slug'
+  to: '/' | '/auth' | '/next-draw' | '/account' | '/prize/$slug'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/next-draw'
     | '/_authenticated/account'
     | '/prize/$slug'
   fileRoutesById: FileRoutesById
@@ -78,6 +88,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  NextDrawRoute: typeof NextDrawRoute
   PrizeSlugRoute: typeof PrizeSlugRoute
 }
 
@@ -102,6 +113,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/next-draw': {
+      id: '/next-draw'
+      path: '/next-draw'
+      fullPath: '/next-draw'
+      preLoaderRoute: typeof NextDrawRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/account': {
@@ -136,6 +154,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  NextDrawRoute: NextDrawRoute,
   PrizeSlugRoute: PrizeSlugRoute,
 }
 export const routeTree = rootRouteImport
