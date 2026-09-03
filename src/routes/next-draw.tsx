@@ -104,7 +104,7 @@ function NextDrawPage() {
                   <p className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wide text-muted-foreground">
                     <CalendarClock className="size-3.5" /> Live draw
                   </p>
-                  <p className="mt-1 font-semibold text-gold">{formatDateTime(p.draw_at)}</p>
+                  <p className="mt-1 font-semibold text-gold">{formatDateTime(effectiveDrawAt(p))}</p>
                   <Link
                     to="/prize/$slug"
                     params={{ slug: p.slug }}
