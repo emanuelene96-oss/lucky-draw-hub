@@ -93,6 +93,7 @@ function PrizePage() {
 
   const left = product.total_tickets - product.sold;
   const pct = (product.sold / product.total_tickets) * 100;
+  const closed = isClosed(product);
 
   return (
     <div className="min-h-screen">
