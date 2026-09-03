@@ -37,7 +37,7 @@ function NextDrawPage() {
   const { data, isLoading } = useQuery({ queryKey: ["products"], queryFn: fetchProducts });
   const closed = (data ?? [])
     .filter(isClosed)
-    .sort((a, b) => new Date(a.draw_at).getTime() - new Date(b.draw_at).getTime());
+    .sort((a, b) => new Date(effectiveDrawAt(a)).getTime() - new Date(effectiveDrawAt(b)).getTime());
 
   return (
     <div className="min-h-screen">
