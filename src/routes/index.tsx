@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
-import { fetchProducts, formatMoney, isClosed, timeLeft } from "@/lib/session";
+import { effectiveEndsAt, fetchProducts, formatMoney, isClosed, timeLeft } from "@/lib/session";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -88,7 +88,7 @@ function Home() {
                             <span className="inline-block rounded-lg bg-primary/15 px-2 py-1 text-sm font-semibold text-primary">
                               {formatMoney(p.ticket_price_cents)}
                             </span>
-                            <p className="mt-1 text-xs text-gold">{timeLeft(p.ends_at)}</p>
+                            <p className="mt-1 text-xs text-gold">{timeLeft(effectiveEndsAt(p))}</p>
                           </div>
                         </div>
                         <Progress value={pct} className="h-1.5" />

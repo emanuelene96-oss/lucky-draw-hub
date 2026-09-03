@@ -56,10 +56,43 @@ export function isSoldOut(p: ProductRow) {
   return p.sold >= p.total_tickets;
 }
 
-/** A draw is "closed" once every ticket is gone or the time limit has passed. */
-export function isClosed(p: ProductRow) {
-  return isSoldOut(p) || new Date(p.ends_at).getTime() <= Date.now();
+/** Minimum share of tickets that must sell before a draw can close on time. */
+export const MIN_CLOSE_RATIO = 0.8;
+const WINDOW_MS = 10 * 86_400_000;
+
+export function reachedThreshold(p: ProductRow) {
+  return p.sold / p.total_tickets >= MIN_CLOSE_RATIO;
 }
+
+/**
+ * If a draw hits its deadline with under 80% of tickets sold, it rolls into
+ * another 10-day window (repeatedly) instead of closing.
+ */
+export function effectiveEndsAt(p: ProductRow): string {
+  const base = new Date(p.ends_at).getTime();
+  if (isSoldOut(p) || reachedThreshold(p)) return p.ends_at;
+  const now = Date.now();
+  if (base > now) return p.ends_at;
+  const windows = Math.floor((now - base) / WINDOW_MS) + 1;
+  return new Date(base + windows * WINDOW_MS).toISOString();
+}
+
+export function effectiveDrawAt(p: ProductRow): string {
+  const end = effectiveEndsAt(p);
+  if (end === p.ends_at) return p.draw_at;
+  return new Date(new Date(end).getTime() + 86_400_000).toISOString();
+}
+
+/** Extended when the deadline passed without reaching the 80% threshold. */
+export function isExtended(p: ProductRow) {
+  return effectiveEndsAt(p) !== p.ends_at;
+}
+
+/** A draw is "closed" once every ticket is gone or its effective window ended. */
+export function isClosed(p: ProductRow) {
+  return isSoldOut(p) || new Date(effectiveEndsAt(p)).getTime() <= Date.now();
+}
+
 
 export function formatDateTime(iso: string) {
   return new Intl.DateTimeFormat("en-US", {

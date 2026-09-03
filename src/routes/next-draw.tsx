@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CalendarClock, Radio } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import {
+  effectiveDrawAt,
   fetchProducts,
   formatDateTime,
   formatMoney,
@@ -36,7 +37,7 @@ function NextDrawPage() {
   const { data, isLoading } = useQuery({ queryKey: ["products"], queryFn: fetchProducts });
   const closed = (data ?? [])
     .filter(isClosed)
-    .sort((a, b) => new Date(a.draw_at).getTime() - new Date(b.draw_at).getTime());
+    .sort((a, b) => new Date(effectiveDrawAt(a)).getTime() - new Date(effectiveDrawAt(b)).getTime());
 
   return (
     <div className="min-h-screen">
@@ -50,8 +51,9 @@ function NextDrawPage() {
           Next <span className="text-gold">Draw</span>
         </h1>
         <p className="mt-4 max-w-xl text-muted-foreground">
-          Once a prize sells all of its tickets — or its 10-day window runs out — it moves here with
-          the date and hour of its live draw.
+          Once a prize sells all of its tickets — or reaches its deadline with at least 80% of
+          tickets sold — it moves here with the date and hour of its live draw. Under 80%, the draw
+          rolls into a fresh 10-day window instead.
         </p>
 
         <div className="mt-10 space-y-4">
@@ -102,7 +104,7 @@ function NextDrawPage() {
                   <p className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wide text-muted-foreground">
                     <CalendarClock className="size-3.5" /> Live draw
                   </p>
-                  <p className="mt-1 font-semibold text-gold">{formatDateTime(p.draw_at)}</p>
+                  <p className="mt-1 font-semibold text-gold">{formatDateTime(effectiveDrawAt(p))}</p>
                   <Link
                     to="/prize/$slug"
                     params={{ slug: p.slug }}
