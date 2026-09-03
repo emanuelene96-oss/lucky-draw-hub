@@ -50,7 +50,7 @@ function Home() {
         <section>
           <div className="mb-6 flex items-end justify-between">
             <h2 className="text-2xl font-semibold">Live prize draws</h2>
-            <span className="text-sm text-muted-foreground">{data?.length ?? 0} open</span>
+            <span className="text-sm text-muted-foreground">{live.length} open</span>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -58,7 +58,7 @@ function Home() {
               ? Array.from({ length: 3 }).map((_, i) => (
                   <Skeleton key={i} className="h-80 rounded-2xl" />
                 ))
-              : data?.map((p) => {
+              : live.map((p) => {
                   const left = p.total_tickets - p.sold;
                   const pct = (p.sold / p.total_tickets) * 100;
                   return (
@@ -84,9 +84,12 @@ function Home() {
                             <h3 className="text-lg font-semibold">{p.name}</h3>
                             <p className="text-sm text-muted-foreground">{p.tagline}</p>
                           </div>
-                          <span className="shrink-0 rounded-lg bg-primary/15 px-2 py-1 text-sm font-semibold text-primary">
-                            {formatMoney(p.ticket_price_cents)}
-                          </span>
+                          <div className="shrink-0 text-right">
+                            <span className="inline-block rounded-lg bg-primary/15 px-2 py-1 text-sm font-semibold text-primary">
+                              {formatMoney(p.ticket_price_cents)}
+                            </span>
+                            <p className="mt-1 text-xs text-gold">{timeLeft(p.ends_at)}</p>
+                          </div>
                         </div>
                         <Progress value={pct} className="h-1.5" />
                         <div className="flex items-center justify-between text-xs text-muted-foreground">
