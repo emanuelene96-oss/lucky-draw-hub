@@ -143,6 +143,19 @@ function PrizePage() {
                 {product.sold.toLocaleString()} sold · {left.toLocaleString()} of{" "}
                 {product.total_tickets.toLocaleString()} tickets left
               </p>
+              <p className="mt-2 text-sm">
+                {closed ? (
+                  <span className="text-gold">
+                    {isSoldOut(product) ? "Sold out" : "Time limit reached"} · live draw{" "}
+                    {formatDateTime(product.draw_at)}
+                  </span>
+                ) : (
+                  <span className="text-muted-foreground">
+                    Closes in <span className="text-gold">{timeLeft(product.ends_at)}</span> · live
+                    draw {formatDateTime(product.draw_at)}
+                  </span>
+                )}
+              </p>
             </div>
 
             <div className="mt-8 surface-card rounded-2xl p-5">
