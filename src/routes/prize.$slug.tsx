@@ -5,7 +5,15 @@ import { ArrowLeft, Loader2, Ticket } from "lucide-react";
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/SiteHeader";
 import { supabase } from "@/integrations/supabase/client";
-import { fetchProducts, formatMoney, useSession } from "@/lib/session";
+import {
+  fetchProducts,
+  formatDateTime,
+  formatMoney,
+  isClosed,
+  isSoldOut,
+  timeLeft,
+  useSession,
+} from "@/lib/session";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
