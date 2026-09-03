@@ -6,14 +6,18 @@ import { toast } from "sonner";
 import { SiteHeader } from "@/components/SiteHeader";
 import { supabase } from "@/integrations/supabase/client";
 import {
+  effectiveDrawAt,
+  effectiveEndsAt,
   fetchProducts,
   formatDateTime,
   formatMoney,
   isClosed,
+  isExtended,
   isSoldOut,
   timeLeft,
   useSession,
 } from "@/lib/session";
+
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
