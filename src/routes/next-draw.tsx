@@ -51,8 +51,9 @@ function NextDrawPage() {
           Next <span className="text-gold">Draw</span>
         </h1>
         <p className="mt-4 max-w-xl text-muted-foreground">
-          Once a prize sells all of its tickets — or its 10-day window runs out — it moves here with
-          the date and hour of its live draw.
+          Once a prize sells all of its tickets — or reaches its deadline with at least 80% of
+          tickets sold — it moves here with the date and hour of its live draw. Under 80%, the draw
+          rolls into a fresh 10-day window instead.
         </p>
 
         <div className="mt-10 space-y-4">
