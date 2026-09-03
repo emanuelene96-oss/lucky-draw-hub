@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CalendarClock, Radio } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import {
+  effectiveDrawAt,
   fetchProducts,
   formatDateTime,
   formatMoney,
