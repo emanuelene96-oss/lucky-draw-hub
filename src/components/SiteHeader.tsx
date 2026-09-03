@@ -31,6 +31,12 @@ export function SiteHeader() {
           <Link to="/" className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground">
             Prizes
           </Link>
+          <Link
+            to="/next-draw"
+            className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
+          >
+            Next Draw
+          </Link>
           {loading ? null : user ? (
             <>
               <Link

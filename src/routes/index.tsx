@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
-import { fetchProducts, formatMoney } from "@/lib/session";
+import { fetchProducts, formatMoney, isClosed, timeLeft } from "@/lib/session";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -27,6 +27,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const { data, isLoading } = useQuery({ queryKey: ["products"], queryFn: fetchProducts });
+  const live = (data ?? []).filter((p) => !isClosed(p));
 
   return (
     <div className="min-h-screen">
