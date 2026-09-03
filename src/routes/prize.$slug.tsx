@@ -151,12 +151,16 @@ function PrizePage() {
                 {closed ? (
                   <span className="text-gold">
                     {isSoldOut(product) ? "Sold out" : "Time limit reached"} · live draw{" "}
-                    {formatDateTime(product.draw_at)}
+                    {formatDateTime(effectiveDrawAt(product))}
                   </span>
                 ) : (
                   <span className="text-muted-foreground">
-                    Closes in <span className="text-gold">{timeLeft(product.ends_at)}</span> · live
-                    draw {formatDateTime(product.draw_at)}
+                    Closes in{" "}
+                    <span className="text-gold">{timeLeft(effectiveEndsAt(product))}</span> · live
+                    draw {formatDateTime(effectiveDrawAt(product))}
+                    {isExtended(product)
+                      ? " · window extended by 10 days (under 80% sold)"
+                      : ""}
                   </span>
                 )}
               </p>
@@ -167,8 +171,9 @@ function PrizePage() {
                 <>
                   <p className="text-sm font-medium">Entries are closed</p>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    The live draw takes place on {formatDateTime(product.draw_at)}.
+                    The live draw takes place on {formatDateTime(effectiveDrawAt(product))}.
                   </p>
+
                   <Link
                     to="/next-draw"
                     className="mt-4 inline-block text-sm text-primary"
