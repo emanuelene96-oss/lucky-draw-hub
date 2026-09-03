@@ -5,7 +5,15 @@ import { ArrowLeft, Loader2, Ticket } from "lucide-react";
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/SiteHeader";
 import { supabase } from "@/integrations/supabase/client";
-import { fetchProducts, formatMoney, useSession } from "@/lib/session";
+import {
+  fetchProducts,
+  formatDateTime,
+  formatMoney,
+  isClosed,
+  isSoldOut,
+  timeLeft,
+  useSession,
+} from "@/lib/session";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -85,6 +93,7 @@ function PrizePage() {
 
   const left = product.total_tickets - product.sold;
   const pct = (product.sold / product.total_tickets) * 100;
+  const closed = isClosed(product);
 
   return (
     <div className="min-h-screen">
@@ -134,63 +143,95 @@ function PrizePage() {
                 {product.sold.toLocaleString()} sold · {left.toLocaleString()} of{" "}
                 {product.total_tickets.toLocaleString()} tickets left
               </p>
+              <p className="mt-2 text-sm">
+                {closed ? (
+                  <span className="text-gold">
+                    {isSoldOut(product) ? "Sold out" : "Time limit reached"} · live draw{" "}
+                    {formatDateTime(product.draw_at)}
+                  </span>
+                ) : (
+                  <span className="text-muted-foreground">
+                    Closes in <span className="text-gold">{timeLeft(product.ends_at)}</span> · live
+                    draw {formatDateTime(product.draw_at)}
+                  </span>
+                )}
+              </p>
             </div>
 
             <div className="mt-8 surface-card rounded-2xl p-5">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Tickets</span>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={() => setQty((q) => Math.max(1, q - 1))}
+              {closed ? (
+                <>
+                  <p className="text-sm font-medium">Entries are closed</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    The live draw takes place on {formatDateTime(product.draw_at)}.
+                  </p>
+                  <Link
+                    to="/next-draw"
+                    className="mt-4 inline-block text-sm text-primary"
                   >
-                    −
-                  </Button>
-                  <span className="w-10 text-center text-lg font-semibold">{qty}</span>
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={() => setQty((q) => Math.min(50, Math.max(1, Math.min(left, q + 1))))}
-                  >
-                    +
-                  </Button>
-                </div>
-              </div>
-
-              <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-                <span>Total</span>
-                <span className="text-base font-semibold text-foreground">
-                  {formatMoney(product.ticket_price_cents * qty)}
-                </span>
-              </div>
-
-              {user ? (
-                <Button
-                  className="mt-5 w-full"
-                  size="lg"
-                  disabled={buy.isPending || left < qty}
-                  onClick={() => buy.mutate()}
-                >
-                  {buy.isPending ? (
-                    <Loader2 className="size-4 animate-spin" />
-                  ) : (
-                    <Ticket className="size-4" />
-                  )}
-                  {left < qty ? "Sold out" : `Buy ${qty} ticket${qty > 1 ? "s" : ""}`}
-                </Button>
+                    See the draw schedule
+                  </Link>
+                </>
               ) : (
-                <Button
-                  className="mt-5 w-full"
-                  size="lg"
-                  onClick={() => navigate({ to: "/auth" })}
-                >
-                  Sign in to buy tickets
-                </Button>
+                <>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">Tickets</span>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        onClick={() => setQty((q) => Math.max(1, q - 1))}
+                      >
+                        −
+                      </Button>
+                      <span className="w-10 text-center text-lg font-semibold">{qty}</span>
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        onClick={() =>
+                          setQty((q) => Math.min(50, Math.max(1, Math.min(left, q + 1))))
+                        }
+                      >
+                        +
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
+                    <span>Total</span>
+                    <span className="text-base font-semibold text-foreground">
+                      {formatMoney(product.ticket_price_cents * qty)}
+                    </span>
+                  </div>
+
+                  {user ? (
+                    <Button
+                      className="mt-5 w-full"
+                      size="lg"
+                      disabled={buy.isPending || left < qty}
+                      onClick={() => buy.mutate()}
+                    >
+                      {buy.isPending ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : (
+                        <Ticket className="size-4" />
+                      )}
+                      {left < qty ? "Sold out" : `Buy ${qty} ticket${qty > 1 ? "s" : ""}`}
+                    </Button>
+                  ) : (
+                    <Button
+                      className="mt-5 w-full"
+                      size="lg"
+                      onClick={() => navigate({ to: "/auth" })}
+                    >
+                      Sign in to buy tickets
+                    </Button>
+                  )}
+                  <p className="mt-3 text-center text-xs text-muted-foreground">
+                    Your numbers are drawn at random from the remaining pool.
+                  </p>
+                </>
               )}
-              <p className="mt-3 text-center text-xs text-muted-foreground">
-                Your numbers are drawn at random from the remaining pool.
-              </p>
             </div>
           </div>
         </div>
